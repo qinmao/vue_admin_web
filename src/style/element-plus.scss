@@ -1,0 +1,70 @@
+// Element-plus 全局样式覆盖
+
+.el-menu {
+  border: none !important;
+  --el-menu-horizontal-height: 48px;
+}
+
+.el-form--inline {
+  .el-form-item {
+    padding-top: 18px; // 对应默认的 margin-bottom: 18px; 上下间距一致
+    & > .el-input,
+    .el-cascader,
+    .el-autocomplete {
+      width: 140px;
+    }
+    .el-date-editor--year,
+    .el-date-editor--years {
+      width: 194px;
+    }
+    .el-select {
+      width: 190px;
+    }
+    .el-date-editor {
+      --el-date-editor-daterange-width: 220px;
+    }
+  }
+}
+
+// 全局样式或组件内样式
+.el-table {
+  min-width: 100% !important; // 强制表格最小宽度为父容器宽度
+}
+
+.el-divider {
+  margin: 0 !important;
+}
+
+.el-dialog__headerbtn,
+.el-message-box__headerbtn {
+  &:hover {
+    .el-dialog__close {
+      color: var(--el-color-info) !important;
+    }
+  }
+}
+
+.el-icon {
+  &.el-dialog__close,
+  &.el-drawer__close,
+  &.el-message-box__close,
+  &.el-notification__closeBtn {
+    width: 24px;
+    height: 24px;
+    border-radius: 4px;
+    outline: none;
+    transition:
+      background-color 0.2s,
+      color 0.2s;
+
+    &:hover {
+      color: rgb(0 0 0 / 88%) !important;
+      text-decoration: none;
+      background-color: rgb(0 0 0 / 6%);
+
+      .pure-dialog-svg {
+        color: rgb(0 0 0 / 88%) !important;
+      }
+    }
+  }
+}

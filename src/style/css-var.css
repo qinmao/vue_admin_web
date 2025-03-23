@@ -1,0 +1,23 @@
+::view-transition-new(root),
+::view-transition-old(root) {
+  /* 关闭默认动画，否则影响自定义动画的执行 */
+  animation: none;
+}
+
+.dark::view-transition-old(root) {
+  z-index: 100;
+}
+
+/* 暗黑模式变量 */
+html.dark {
+  --border-color: #303030;
+  --main-bg-color: #020408;
+  --icon-hover-bg-color: #242424;
+}
+
+/* 明亮模式变量 */
+html {
+  --border-color: #dcdfe6;
+  --main-bg-color: #f0f2f5;
+  --icon-hover-bg-color: #f6f6f6;
+}

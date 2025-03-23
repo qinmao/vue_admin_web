@@ -1,0 +1,8 @@
+{
+  "common": {
+    "welcome": "Welcome to Our Platform",
+    "userGreeting": "Hello, {name}!",
+    "showMessage": "Show Message",
+    "languageChanged": "Language changed successfully"
+  }
+}

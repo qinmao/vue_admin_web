@@ -1,0 +1,8 @@
+{
+  "common": {
+    "welcome": "欢迎来到我们的平台",
+    "userGreeting": "你好，{name}！",
+    "showMessage": "显示消息",
+    "languageChanged": "语言切换成功"
+  }
+}

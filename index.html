@@ -1,0 +1,39 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <link rel="icon" href="/favicon.ico" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
+    <meta name="renderer" content="webkit" />
+    <meta
+      name="viewport"
+      content="width=device-width,initial-scale=1.0,minimum-scale=1.0,maximum-scale=1.0,user-scalable=0"
+    />
+    <!-- 防止注入脚本：内容安全策略(CSP) 是应对跨站脚本攻击和数据注入攻击的又一层保护措施 -->
+    <!-- 使用 file:// 协议加载资源时不支持 -->
+    <!-- Content-Security-Policy: script-src 'self' https://apis.example.com -->
+    <!-- <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self'"> -->
+    <title>demo-admin-Web</title>
+  </head>
+  <body>
+    <div id="app"></div>
+    <script type="module" src="/src/main.js"></script>
+  </body>
+</html>
+<style>
+  html,
+    body,
+    /* #app {
+      position: relative;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      width: 100%;
+      height: 100%;
+      overflow: hidden;
+    } */
+    #app {
+    width: 100%;
+    height: 100%;
+  }
+</style>
