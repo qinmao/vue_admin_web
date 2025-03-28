@@ -139,10 +139,10 @@ export const constantRoutes = [
         }
       },
       {
-        path: 'alert',
-        component: () => import('@/views/demo-util/test/index.vue'),
+        path: 'dialog',
+        component: () => import('@/views/demo-util/dialog/index.vue'),
         meta: {
-          title: '命令式组件'
+          title: '命令式弹窗组件'
         }
       },
       {
@@ -216,14 +216,6 @@ export const constantRoutes = [
     component: () => import('@/views/login/regist.vue'),
     meta: {
       title: '注册',
-      hidden: true
-    }
-  },
-  {
-    path: '/test',
-    component: () => import('@/views/home/test.vue'),
-    meta: {
-      title: 'test',
       hidden: true
     }
   },
