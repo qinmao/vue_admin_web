@@ -69,7 +69,7 @@
         element-loading-text="加载中..."
         max-height="640"
       >
-        <el-table-column prop="dealUserName" label="处置民警" />
+        <el-table-column prop="dealUserName" label="处置人" />
         <el-table-column prop="dealDeptName" label="归属部门" />
         <el-table-column prop="deployCount" sortable label="共接收"
           ><template #default="{ row }">
@@ -307,7 +307,7 @@ export default {
           red
         } = item
         return {
-          处置民警: dealUserName,
+          处置人: dealUserName,
           归属部门: dealDeptName,
           已下发: deployCount,
           待签收: noSign,

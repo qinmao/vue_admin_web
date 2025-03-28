@@ -69,7 +69,7 @@
         element-loading-text="加载中..."
         max-height="640"
       >
-        <el-table-column prop="createUserName" sortable label="发布民警" />
+        <el-table-column prop="createUserName" sortable label="发布人" />
         <el-table-column prop="createDeptName" sortable label="归属部门" />
         <el-table-column prop="deployCount" sortable label="共发布">
           <template #default="{ row }">
