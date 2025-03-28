@@ -58,8 +58,7 @@ export default defineConfig({
         /\.vue$/,
         /\.vue\?vue/ // .vue
       ],
-      // global imports to register
-      // 自动导入 Vue 相关函数，如：ref, reactive, toRef 等
+      // 指定要自动导入的库或模块，支持字符串、数组或预设对象。
       imports: [
         // presets
         'vue',
@@ -73,13 +72,14 @@ export default defineConfig({
         }
       ],
       resolvers: [
-        // 按需 自动导入 ElementPlus 相关的函数带样式 如:ElMessage
+        // 自定义解析器，适配特定库（如 Element Plus、Vant）
         ElementPlusResolver(),
-        // 自动导入图标组件
+        // 图标解析器
         IconsResolver({
           // prefix: 'icon' // 默认 i
         })
       ],
+      viteOptimizeDeps: true,
       eslintrc: {
         enabled: true // Default `false`
       }

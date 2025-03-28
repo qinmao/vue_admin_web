@@ -252,11 +252,11 @@ export const asyncRoutes = [
     component: Layout,
     children: [
       {
-        path: 'user',
+        path: 'accout',
         component: () => import('@/views/system/user/index.vue'),
         meta: {
           icon: 'ri-admin-line',
-          title: '用户管理'
+          title: '账号管理'
         }
       },
       {

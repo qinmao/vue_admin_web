@@ -67,7 +67,6 @@
             <el-table-column fixed="right" label="操作" min-width="140">
               <template #default="{ row }">
                 <el-button
-                  class="reset-margin"
                   link
                   type="primary"
                   :icon="useIcon('ep-edit-pen')"
@@ -80,19 +79,11 @@
                   @confirm="onDeleteBtnClick(row)"
                 >
                   <template #reference>
-                    <el-button
-                      class="reset-margin"
-                      link
-                      type="primary"
-                      :icon="useIcon('ep-delete')"
-                    >
-                      删除
-                    </el-button>
+                    <el-button link type="primary" :icon="useIcon('ep-delete')"> 删除 </el-button>
                   </template>
                 </el-popconfirm>
                 <el-button
                   @click="onPermissionBtnClick(row)"
-                  class="reset-margin"
                   link
                   type="primary"
                   :icon="useIcon('ep-menu')"
@@ -147,7 +138,6 @@
       </div>
     </div>
     <el-dialog
-      class="pure-dialog"
       :before-close="handleClose"
       width="48%"
       draggable
@@ -277,7 +267,7 @@ function onSwitchChange(status, row) {
   ElMessageBox.confirm(
     `确认要<strong>${
       row.status === 0 ? '停用' : '启用'
-    }</strong><strong style='color:var(--el-color-primary)'>${row.userName}</strong>用户吗?`,
+    }</strong><strong style='color:var(--el-color-primary)'>${row.name}</strong>吗?`,
     '系统提示',
     {
       confirmButtonText: '确定',
@@ -288,11 +278,19 @@ function onSwitchChange(status, row) {
     }
   )
     .then(() => {
-      updateUserInfo(row.id, { status })
+      updateRole(row.id, { status })
     })
     .catch(() => {
       row.status === 0 ? (row.status = 1) : (row.status = 0)
     })
+}
+function updateRole(id, roleInfo) {
+  $http.post(`/api/role/update/${id}`, roleInfo).then(() => {
+    ElMessage({
+      message: '修改成功',
+      type: 'success'
+    })
+  })
 }
 function onAddDialogClick() {
   dialogVisible.value = true

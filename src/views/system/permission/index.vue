@@ -56,7 +56,6 @@
           <el-table-column fixed="right" label="操作" min-width="140">
             <template #default="{ row }">
               <el-button
-                class="reset-margin"
                 link
                 type="primary"
                 :icon="useIcon('ep-edit-pen')"
@@ -65,13 +64,11 @@
                 编辑
               </el-button>
               <el-popconfirm
-                :title="`是否确认删除角色名称为${row.name}的这条数据`"
+                :title="`是否确认删除名称为${row.name}的这条数据`"
                 @confirm="onDeleteBtnClick(row)"
               >
                 <template #reference>
-                  <el-button class="reset-margin" link type="primary" :icon="useIcon('ep-delete')">
-                    删除
-                  </el-button>
+                  <el-button link type="primary" :icon="useIcon('ep-delete')"> 删除 </el-button>
                 </template>
               </el-popconfirm>
               <el-button
@@ -88,7 +85,6 @@
       </div>
     </div>
     <el-dialog
-      class="pure-dialog"
       :before-close="handleClose"
       width="48%"
       draggable

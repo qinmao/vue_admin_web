@@ -47,7 +47,6 @@
           <el-table-column label="操作">
             <template #default="{ row }">
               <el-button
-                class="reset-margin"
                 link
                 type="primary"
                 :icon="useIcon('ep-edit-pen')"
@@ -57,7 +56,6 @@
               </el-button>
               <el-button
                 :icon="useIcon('ep-pointer')"
-                class="reset-margin"
                 link
                 :loading="tryLoading"
                 type="primary"

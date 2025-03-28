@@ -3,6 +3,16 @@
 .el-menu {
   border: none !important;
   --el-menu-horizontal-height: 48px;
+  &:not(.el-menu--collapse) {
+    width: 200px;
+  }
+  .el-menu-item span,
+  .el-sub-menu__title span {
+    max-width: 110px;
+    overflow: hidden;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+  }
 }
 
 .el-form--inline {
@@ -61,10 +71,6 @@
       color: rgb(0 0 0 / 88%) !important;
       text-decoration: none;
       background-color: rgb(0 0 0 / 6%);
-
-      .pure-dialog-svg {
-        color: rgb(0 0 0 / 88%) !important;
-      }
     }
   }
 }

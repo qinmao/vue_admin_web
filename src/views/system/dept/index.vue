@@ -28,16 +28,7 @@
               新增部门
             </el-button>
           </div>
-          <el-tooltip effect="dark" :content="isExpandAll ? '折叠' : '展开'" placement="top">
-            <el-icon
-              class="icon"
-              :size="20"
-              :style="{ transform: isExpandAll ? 'rotate(180deg)' : 'rotate(90deg)' }"
-              @click="onExpandClick"
-            >
-              <i-ep-upload />
-            </el-icon>
-          </el-tooltip>
+
           <el-divider direction="vertical" />
           <el-tooltip effect="dark" content="刷新" placement="top">
             <el-icon class="icon" :size="20" @click="onResetBtnClick">
@@ -48,7 +39,6 @@
       </div>
       <div class="table-wrapper" ref="tableWrapperRef">
         <el-table
-          ref="tableRef"
           :data="list"
           v-loading="loading"
           default-expand-all
@@ -72,7 +62,6 @@
           <el-table-column fixed="right" label="操作" width="160">
             <template #default="{ row }">
               <el-button
-                class="reset-margin"
                 link
                 type="primary"
                 :icon="useIcon('ep-edit')"
@@ -85,9 +74,7 @@
                 @confirm="onDeleteBtnClick(row)"
               >
                 <template #reference>
-                  <el-button class="reset-margin" link type="primary" :icon="useIcon('ep-delete')">
-                    删除
-                  </el-button>
+                  <el-button link type="primary" :icon="useIcon('ep-delete')"> 删除 </el-button>
                 </template>
               </el-popconfirm>
             </template>
@@ -95,7 +82,7 @@
         </el-table>
       </div>
     </div>
-    <el-dialog class="pure-dialog" width="40%" draggable title="添加或编辑" v-model="dialogVisible">
+    <el-dialog width="40%" draggable title="添加或编辑" v-model="dialogVisible">
       <el-form ref="ruleFormRef" :model="ruleForm" :rules="formRules" label-width="100px">
         <el-form-item label="组织类型" prop="deptType">
           <el-select v-model="ruleForm.deptType" placeholder="请选择组织类型" clearable>
@@ -183,8 +170,7 @@ let searchForm = reactive({
   status: 1
 })
 let btnLoading = ref(false)
-let isExpandAll = true
-let dialogVisible = false
+let dialogVisible = ref(false)
 let ruleForm = reactive({
   pId: '',
   name: '',
@@ -192,6 +178,7 @@ let ruleForm = reactive({
   sort: 0,
   remark: ''
 })
+const searchFormRef = ref(null)
 
 const formRules = reactive({
   deptType: [{ required: true, message: '组织类型为必选项', trigger: 'change' }],
@@ -199,15 +186,9 @@ const formRules = reactive({
   name: [{ required: true, message: '组织名称为必填项', trigger: 'blur' }]
 })
 
-const tableRef = ref(null)
 const ruleFormRef = ref(null)
 
 let editFormId = ''
-
-function onExpandClick() {
-  isExpandAll.value = !isExpandAll.value
-  tableRef.toggleRowExpansion(list[0], isExpandAll.value)
-}
 
 function getList() {
   return $http.post('/api/dept/getList', searchForm)
@@ -224,7 +205,7 @@ async function onSearchBtnClick() {
 
 function onResetBtnClick() {
   if (!searchFormRef.value) return
-  searchFormRef.resetFields()
+  searchFormRef.value.resetFields()
   onSearchBtnClick()
 }
 

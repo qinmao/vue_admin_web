@@ -121,8 +121,6 @@ This template should help get you started developing with Vue 3 in Vite.
   - 开发环境 https 的支持
   - 输出分类打包、抽离公共 chunk
 
-* 组件加载时统一loading效果
-
 ## 实现的功能
 * 常见系统配置
   - [x] 两种布局方式，菜单根据路由自动生成
@@ -133,7 +131,7 @@ This template should help get you started developing with Vue 3 in Vite.
 
 * 组件
   - [x] 表格内容区自适应高度
-  - [ ] 封装函数式组件
+  - [*] 封装函数式调用弹窗组件
 
 * 业务
   - [x] 账号登录（唯一登录）
@@ -141,7 +139,7 @@ This template should help get you started developing with Vue 3 in Vite.
   - [ ] 扫码登录
 
   - [x] 用户管理
-  - [ ] 权限系统：角色控制权限、动态添加权限路由
+  - [x] 权限系统：角色控制权限、动态添加权限路由
 
   - [ ] 实时聊天
   - [ ] 在线用户

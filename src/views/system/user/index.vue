@@ -86,7 +86,6 @@
             <el-table-column fixed="right" label="操作" min-width="140">
               <template #default="{ row }">
                 <el-button
-                  class="reset-margin"
                   link
                   type="primary"
                   :icon="useIcon('ep-edit-pen')"
@@ -99,14 +98,7 @@
                   @confirm="onDeleteBtnClick(row)"
                 >
                   <template #reference>
-                    <el-button
-                      class="reset-margin"
-                      link
-                      type="primary"
-                      :icon="useIcon('ep-delete')"
-                    >
-                      删除
-                    </el-button>
+                    <el-button link type="primary" :icon="useIcon('ep-delete')"> 删除 </el-button>
                   </template>
                 </el-popconfirm>
                 <el-dropdown>
@@ -133,7 +125,7 @@
                           link
                           type="primary"
                           :icon="useIcon('ri-admin-line')"
-                          @click="onRoleClick(row)"
+                          @click="onEditRoleClick(row)"
                         >
                           分配角色
                         </el-button>
@@ -158,260 +150,23 @@
         />
       </div>
     </div>
-    <el-dialog
-      class="pure-dialog"
-      :before-close="handleClose"
-      width="48%"
-      draggable
-      title="添加或编辑"
-      v-model="dialogVisible"
-    >
-      <el-form ref="ruleFormRef" :model="ruleForm" :rules="formRules" label-width="100px">
-        <el-row :gutter="30">
-          <el-col :span="12">
-            <el-form-item label="用户名称" prop="userName">
-              <el-input v-model="ruleForm.userName" clearable placeholder="请输入用户名称" />
-            </el-form-item>
-          </el-col>
-          <el-col :span="12">
-            <el-form-item label="登录账号" prop="account">
-              <el-input v-model="ruleForm.account" clearable placeholder="请输入账号" />
-            </el-form-item>
-          </el-col>
-        </el-row>
-        <el-row :gutter="30">
-          <el-col :span="12" v-if="!editFormId">
-            <el-form-item label="用户密码" prop="password">
-              <el-input
-                type="password"
-                clearable
-                show-password
-                v-model="ruleForm.password"
-                placeholder="请输入用户密码"
-              />
-            </el-form-item>
-          </el-col>
-          <el-col :span="12">
-            <el-form-item label="手机号" prop="phone">
-              <el-input v-model="ruleForm.phone" clearable placeholder="请输入手机号" />
-            </el-form-item>
-          </el-col>
-        </el-row>
-        <el-form-item label="归属部门" prop="deptIds">
-          <el-cascader
-            style="width: 100%"
-            v-model="ruleForm.deptIds"
-            :show-all-levels="false"
-            :options="treeDepts"
-            :props="{
-              value: 'id',
-              label: 'name',
-              // 设置父子节点取消选中关联，从而达到选择任意一级选项
-              checkStrictly: true,
-              multiple: true
-            }"
-            clearable
-            filterable
-            placeholder="请选择归属部门"
-          >
-            <template #default="{ node, data }">
-              <span>{{ data.name }}</span>
-              <span v-if="!node.isLeaf"> ({{ data.children.length }}) </span>
-            </template>
-          </el-cascader>
-        </el-form-item>
-        <el-form-item label="直属领导" prop="pId">
-          <el-cascader
-            style="width: 100%"
-            v-model="ruleForm.pId"
-            :options="treeUserList"
-            :props="{
-              value: 'id',
-              label: 'userName',
-              emitPath: false,
-              checkStrictly: true
-            }"
-            clearable
-            filterable
-            placeholder="请选择直属领导"
-          >
-            <template #default="{ node, data }">
-              <span>{{ data.userName }}</span>
-              <span v-if="!node.isLeaf"> ({{ data.children.length }}) </span>
-            </template>
-          </el-cascader>
-        </el-form-item>
-        <el-row :gutter="30">
-          <el-col :span="12">
-            <el-form-item label="邮箱" prop="email">
-              <el-input v-model="ruleForm.email" clearable placeholder="请输入邮箱" />
-            </el-form-item>
-          </el-col>
-          <el-col :span="12">
-            <el-form-item label="用户性别" prop="sex">
-              <el-select
-                v-model="ruleForm.sex"
-                placeholder="请选择用户性别"
-                style="width: 100%"
-                clearable
-              >
-                <el-option label="男性" :value="1" />
-                <el-option label="女性" :value="2" />
-                <el-option label="未知" :value="3" />
-              </el-select>
-            </el-form-item>
-          </el-col>
-        </el-row>
-        <el-row :gutter="30">
-          <el-col :span="12">
-            <el-form-item label="备注" prop="remark">
-              <el-input v-model="ruleForm.remark" placeholder="请输入备注信息" type="textarea" />
-            </el-form-item>
-          </el-col>
-          <el-col :span="12" v-if="!editFormId">
-            <el-form-item label="状态" prop="status">
-              <el-switch
-                v-model="ruleForm.status"
-                inline-prompt
-                :active-value="1"
-                :inactive-value="0"
-                active-text="启用"
-                inactive-text="停用"
-              />
-            </el-form-item>
-          </el-col>
-        </el-row>
-      </el-form>
-      <template #footer>
-        <el-button @click="onAbortClck">重置</el-button>
-        <el-button type="primary" :loading="btnLoading" @click="onSubmitClick"> 确定 </el-button>
-      </template>
-    </el-dialog>
-    <el-dialog
-      class="pure-dialog"
-      :before-close="pwdHandleClose"
-      width="30%"
-      draggable
-      :title="resetPwdTitle"
-      v-model="pwdDialogVisible"
-    >
-      <el-form
-        ref="passwordRef"
-        :model="pwdForm"
-        :rules="[{ required: true, message: '请输入新密码', trigger: 'blur' }]"
-      >
-        <el-form-item label="用户密码" prop="password">
-          <el-input
-            type="password"
-            clearable
-            show-password
-            v-model="pwdForm.password"
-            placeholder="请输入用户新密码"
-          />
-        </el-form-item>
-      </el-form>
-      <div class="pwd-tip-wrapper">
-        <div class="tip-item" v-for="(item, idx) in pwdProgress" :key="idx">
-          <el-progress
-            striped
-            striped-flow
-            :duration="curScore === idx ? 6 : 0"
-            :percentage="curScore >= idx ? 100 : 0"
-            :color="item.color"
-            :stroke-width="10"
-            :show-text="false"
-          />
-          <p :style="{ 'text-align': 'center', color: curScore === idx ? item.color : '' }">
-            {{ item.text }}
-          </p>
-        </div>
-      </div>
-      <template #footer>
-        <el-button @click="onPwdAbortClick">重置</el-button>
-        <el-button type="primary" :loading="pwdBtnloading" @click="onPwdSubmitClick">
-          确定
-        </el-button>
-      </template>
-    </el-dialog>
-    <el-dialog
-      class="pure-dialog"
-      :before-close="roleHandleClose"
-      width="30%"
-      draggable
-      :title="roleTitle"
-      v-model="roleDialogVisible"
-    >
-      <el-form :model="roleForm">
-        <el-form-item label="用户名称">
-          <el-input disabled v-model="roleForm.userName" />
-        </el-form-item>
-        <el-form-item label="用户id" v-show="false">
-          <el-input v-model="roleForm.userId" />
-        </el-form-item>
-        <el-form-item label="角色列表" prop="roleIds">
-          <el-select
-            v-model="roleForm.roleIds"
-            placeholder="请选择"
-            style="width: 100%"
-            clearable
-            multiple
-          >
-            <el-option
-              v-for="(item, index) in roleList"
-              :key="index"
-              :value="item.id"
-              :label="item.name"
-            >
-              {{ item.name }}
-            </el-option>
-          </el-select>
-        </el-form-item>
-      </el-form>
-      <template #footer>
-        <el-button @click="roleDialogVisible = false">取消</el-button>
-        <el-button type="primary" :loading="roleBtnloading" @click="onRoleSubmitClick">
-          确定
-        </el-button>
-      </template>
-    </el-dialog>
   </div>
 </template>
 <script setup>
 import { $http } from '@/plugins/axios/index'
 import tree from './tree.vue'
 import { useIcon } from '@/components/CyIcon/hook'
-import { validPhone, validEmail, buildTree, getAllPathsFromTree } from '@/utils'
-import { usePwd, useRole } from './utils/hook'
+import { buildTree, getAllPathsFromTree } from '@/utils'
 import { useDept } from '@/views/system/dept/utils/hook'
 const { treeDepts, getDeptList } = useDept()
 import { useResizeTable } from '@/views/hook/table'
 const { tableHeight, tableWrapperRef } = useResizeTable()
 
-const {
-  pwdDialogVisible,
-  passwordRef,
-  pwdForm,
-  pwdProgress,
-  curScore,
-  resetPwdTitle,
-  pwdBtnloading,
-  onPwdAbortClick,
-  onPwdSubmitClick,
-  onResetPwdClick,
-  pwdHandleClose
-} = usePwd()
-
-const {
-  roleTitle,
-  roleDialogVisible,
-  roleBtnloading,
-  roleForm,
-  roleList,
-  roleHandleClose,
-  getRoleList,
-  onRoleClick,
-  onRoleSubmitClick
-} = useRole()
+import PwdForm from './form/pwd-form.vue'
+import AccountForm from './form/account-form.vue'
+import RoleForm from './form/role-form.vue'
+import { useDialog } from '@/components/CyDialog/hook'
+const { createDialog } = useDialog()
 
 defineOptions({
   name: 'User'
@@ -434,60 +189,8 @@ const loading = ref(false)
 const list = ref([])
 const total = ref(0)
 
-const ruleFormRef = ref()
-const dialogVisible = ref(false)
-const btnLoading = ref(false)
 const treeUserList = ref([])
-let ruleForm = reactive({
-  userName: '',
-  deptIds: [],
-  account: '',
-  pId: '',
-  password: '',
-  phone: '',
-  email: '',
-  sex: '',
-  status: 1,
-  remark: ''
-})
-const formRules = reactive({
-  userName: [{ required: true, message: '用户名为必填项', trigger: 'blur' }],
-  password: [{ required: true, message: '用户密码为必填项', trigger: 'blur' }],
-  account: [{ required: true, message: '账号为必填项', trigger: 'blur' }],
-  phone: [
-    {
-      required: true,
-      message: '手机号为必填项',
-      trigger: 'blur',
-      validator(rule, value, callback) {
-        if (!value) {
-          callback(new Error('请输手机号'))
-        } else if (!validPhone(value)) {
-          callback(new Error('手机号格式错误'))
-        } else {
-          callback()
-        }
-      }
-    }
-  ],
-  deptIds: [{ required: true, message: '用户归属部门为必填项', trigger: 'change' }],
-  //   pId: [{ required: true, message: '用户直属领导为必选项', trigger: 'change' }],
-  email: [
-    {
-      validator: (rule, value, callback) => {
-        if (!value) {
-          callback()
-        } else if (!validEmail(value)) {
-          callback(new Error('请输入正确的邮箱格式'))
-        } else {
-          callback()
-        }
-      },
-      trigger: 'blur'
-    }
-  ]
-})
-let editFormId = ref('')
+const roleList = ref([])
 
 function onTreeSelect({ id, selected }) {
   searchForm.deptId = selected ? id : 68
@@ -574,91 +277,51 @@ function onSwitchChange(status, row) {
     })
 }
 
-function handleClose(done) {
-  ElMessageBox.confirm('确定要关闭吗?')
-    .then(() => {
-      done()
-    })
-    .catch(() => {
-      // catch error
-    })
-}
-
 function onAddDialogClick() {
-  dialogVisible.value = true
-  editFormId.value = ''
-  nextTick(() => {
-    ruleFormRef.value.resetFields()
-  })
-}
+  createDialog({
+    width: '50%',
+    title: `添加账号`,
+    content: AccountForm,
+    contentProps: {
+      initData: {},
+      id: '',
+      treeDepts: treeDepts.value,
+      treeUserList: treeUserList.value
+    },
+    buttons: [
+      {
+        text: '提交',
+        type: 'primary',
+        handle: async ({ formData, validate, close }) => {
+          const isValid = await validate()
+          if (!isValid) return
 
-function onAbortClck() {
-  ruleFormRef.value.resetFields()
-  btnLoading.value = false
-}
-
-async function getList() {
-  const { result: userList } = await $http.post(`/api/user/getList`, { status: 1 })
-  const treeUserData = buildTree(userList)
-  treeUserList.value = treeUserData || []
-}
-
-function addUser(params) {
-  btnLoading.value = true
-
-  $http
-    .post('/api/user/add', params)
-    .then(() => {
-      dialogVisible.value = false
-      ElMessage({
-        message: '添加用户成功',
-        type: 'success'
-      })
-      onSearchBtnClick()
-    })
-    .finally(() => {
-      btnLoading.value = false
-    })
-}
-
-function updateUser(params) {
-  btnLoading.value = true
-  $http
-    .post(`/api/user/update/${editFormId.value}`, params)
-    .then(() => {
-      dialogVisible.value = false
-      ElMessage({
-        message: '修改用户信息成功',
-        type: 'success'
-      })
-      onSearchBtnClick()
-    })
-    .finally(() => {
-      btnLoading.value = false
-    })
-}
-async function onSubmitClick() {
-  await ruleFormRef.value.validate((valid, fields) => {
-    if (valid) {
-      //  处理 用户归属部门
-      const { deptIds, ...rest } = ruleForm
-      const formDeptIds = [...new Set(deptIds.flat())]
-      const formData = { deptIds: formDeptIds, ...rest }
-      if (editFormId.value) {
-        updateUser(formData)
-      } else {
-        addUser(formData)
+          //  处理 用户归属部门
+          const { deptIds, ...rest } = formData
+          const formDeptIds = [...new Set(deptIds.flat())]
+          const params = { deptIds: formDeptIds, ...rest }
+          addUser(params).then(() => {
+            ElMessage({
+              message: '添加用户成功',
+              type: 'success'
+            })
+            onSearchBtnClick()
+          })
+          close()
+        }
+      },
+      {
+        text: '取消',
+        handle: ({ formData, close }) => close()
       }
-    } else {
-      console.log('error submit!', fields)
-    }
+    ]
   })
 }
+
 async function onEditDialogClick(row) {
   //   const { result } = await $http.get(`/api/user/getUsertDetail/${row.id}`)
   const result = JSON.parse(JSON.stringify(row))
   const { depts, paths, createTime, id, ...rest } = result
-
   const deptIds = []
   paths.forEach((item) => {
     const currDeptIds = item.map((deptItem) => deptItem.id)
@@ -666,13 +329,137 @@ async function onEditDialogClick(row) {
       deptIds.push(currDeptIds)
     }
   })
-  editFormId.value = id
-  ruleForm = {
-    deptIds,
-    ...rest
-  }
-  dialogVisible.value = true
+
+  createDialog({
+    width: '50%',
+    title: `编辑账号`,
+    content: AccountForm,
+    contentProps: {
+      initData: { deptIds, ...rest },
+      id,
+      treeDepts: treeDepts.value,
+      treeUserList: treeUserList.value
+    },
+    buttons: [
+      {
+        text: '提交',
+        type: 'primary',
+        handle: async ({ formData, validate, close }) => {
+          const isValid = await validate()
+          if (!isValid) return
+          //  处理 用户归属
+          const { deptIds, password, ...rest } = formData
+          const formDeptIds = [...new Set(deptIds.flat())]
+          const params = { deptIds: formDeptIds, ...rest }
+          updateUser(id, params).then(() => {
+            ElMessage({
+              message: '修改成功',
+              type: 'success'
+            })
+            onSearchBtnClick()
+          })
+          close()
+        }
+      },
+      {
+        text: '取消',
+        handle: ({ formData, close }) => close()
+      }
+    ]
+  })
 }
+
+function updatePwd(id, pwdForm) {
+  return $http.post(`/api/user/updatePassword/${id}`, pwdForm)
+}
+
+function onResetPwdClick(row) {
+  createDialog({
+    width: '50%',
+    title: `重置 ${row.account} 用户的密码`,
+    content: PwdForm,
+    buttons: [
+      {
+        text: '提交',
+        type: 'primary',
+        handle: async ({ formData, validate, close }) => {
+          const isValid = await validate()
+          if (!isValid) return
+          updatePwd(row.id, formData).then(() => {
+            ElMessage({
+              message: `密码已成功重置`,
+              type: 'success'
+            })
+            close()
+          })
+        }
+      },
+      {
+        text: '取消',
+        handle: ({ formData, close }) => close()
+      }
+    ]
+  })
+}
+
+// 分配用户角色
+function updateUserRole(id, params) {
+  return $http.post(`/api/user/updateUserRole/${id}`, params)
+}
+
+async function onEditRoleClick(row) {
+  // 获取当前用户用户的角色
+  const { result } = await $http.get(`/api/user/getUsertDetail/${row.id}`)
+  const roleIds = result.roles.map((item) => item.id) || []
+  createDialog({
+    width: '50%',
+    title: `为 ${row.account} 分配角色`,
+    content: RoleForm,
+    contentProps: {
+      initData: {
+        roleIds
+      },
+      roleList: roleList.value
+    },
+    buttons: [
+      {
+        text: '提交',
+        type: 'primary',
+        handle: async ({ formData, validate, close }) => {
+          const isValid = await validate()
+          if (!isValid) return
+
+          updateUserRole(row.id, formData).then(() => {
+            ElMessage({
+              message: '分配角色成功',
+              type: 'success'
+            })
+          })
+          close()
+        }
+      },
+      {
+        text: '取消',
+        handle: ({ formData, close }) => close()
+      }
+    ]
+  })
+}
+
+async function getUserList() {
+  const { result: userList } = await $http.post(`/api/user/getList`, { status: 1 })
+  const treeUserData = buildTree(userList)
+  treeUserList.value = treeUserData || []
+}
+
+function addUser(params) {
+  return $http.post('/api/user/add', params)
+}
+
+function updateUser(id, params) {
+  return $http.post(`/api/user/update/${id}`, params)
+}
+
 function onDeleteBtnClick(row) {
   $http.post(`/api/user/delete/${row.id}`).then(() => {
     ElMessage({
@@ -682,14 +469,18 @@ function onDeleteBtnClick(row) {
     onSearchBtnClick()
   })
 }
+
+async function getRoleList() {
+  const { result } = await $http.get('/api/role/list')
+  roleList.value = result || []
+}
+
 onMounted(() => {
   getDeptList() // 获取层级化的部门数据
+  getRoleList()
+  getUserList()
 
   getPageList()
-
-  getList()
-
-  getRoleList()
 })
 </script>
 

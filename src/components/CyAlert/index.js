@@ -5,9 +5,10 @@ export default function CyAlert(msg) {
   const app = createApp(alert, {
     msg
   })
-  const div = document.createElement('div')
-  app.mount(div)
-  document.body.appendChild(div)
+  const container = document.createElement('div')
+  document.body.appendChild(container)
+
+  app.mount(container)
 
   return () => {
     app.unmount(div)
